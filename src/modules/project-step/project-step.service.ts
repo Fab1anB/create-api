@@ -17,7 +17,10 @@ export class ProjectStepService {
   ) {}
 
   async create(createProjectStepDto: CreateProjectStepDto, projectId: number) {
-    this.logger.log(`Create ProjectStep${createProjectStepDto.title} for Project ${projectId}`);
+    this.logger.log(
+      `Create ProjectStep ${createProjectStepDto.title} for Project ${projectId}`,
+      'ProjectStepService.create',
+    );
 
     const project = await this.projectRepository.findOneBy({ id: projectId });
 
@@ -39,6 +42,10 @@ export class ProjectStepService {
   }
 
   async findAll(projectId: number) {
+    this.logger.log(
+      `Find all ProjectSteps for Project ${projectId}`,
+      'ProjectStepService.findAll',
+    );
     const project = await this.projectRepository.findOne({
       where: { id: projectId },
     });
@@ -50,14 +57,17 @@ export class ProjectStepService {
   }
 
   findOne(id: number) {
+    this.logger.log(`Find ProjectStep ${id}`, 'ProjectStepService.findOne');
     return this.projectStepRepository.findOneBy({ id });
   }
 
   update(id: number, updateProjectStepDto: UpdateProjectStepDto) {
+    this.logger.log(`Update ProjectStep ${id}`, 'ProjectStepService.update');
     return this.projectStepRepository.update({ id }, updateProjectStepDto);
   }
 
   remove(id: number) {
+    this.logger.log(`Remove ProjectStep ${id}`, 'ProjectStepService.remove');
     return this.projectStepRepository.delete({ id });
   }
 }
