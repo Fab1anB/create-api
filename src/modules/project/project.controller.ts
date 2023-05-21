@@ -1,11 +1,12 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Logger,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -13,6 +14,7 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 
 @Controller('projects')
 export class ProjectController {
+  private readonly logger = new Logger(ProjectController.name);
   constructor(private readonly projectService: ProjectService) {}
 
   @Post()

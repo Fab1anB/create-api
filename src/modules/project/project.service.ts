@@ -30,7 +30,13 @@ export class ProjectService {
     return found;
   }
 
-  update(id: number, updateProjectDto: UpdateProjectDto) {
+ async update(id: number, updateProjectDto: UpdateProjectDto) {
+    const found = await this.projectRepository.findOneBy({ id });
+
+    if(!found){
+      throw new NotFoundException(`${id} not found.`)
+    }
+
     return this.projectRepository.update({ id }, updateProjectDto);
   }
 

@@ -1,6 +1,6 @@
 import { IProjectStep, ProjectStep } from './project-step.entity';
 
-export const projectStepEntityMock: IProjectStep[] = [
+export const projectStepEntityMock = [
   {
     id: 1,
     title: 'BRETTER ZUSCHNEIDEN',

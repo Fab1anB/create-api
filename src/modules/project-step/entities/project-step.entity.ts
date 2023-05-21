@@ -1,30 +1,29 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Project } from '../../project/entities/project.entity';
+import {ProjectStepService} from "../project-step.service";
 
 export interface IProjectStep {
-    id: number;
-    title: string;
-    description: string;
-    image: string;
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  project: Project;
 }
 
 @Entity()
 export class ProjectStep implements IProjectStep {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    title: string;
+  @Column()
+  title: string;
 
-    @Column()
-    description: string;
+  @Column()
+  description: string;
 
-     @Column()
-    image: string;
+  @Column()
+  image: string;
 
-    constructor(id: number, title: string, description: string, image: string) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.image = image;
-    }
+  @ManyToOne(() => Project, (project) => project.id)
+  project: Project;
 }

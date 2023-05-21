@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { ProjectModule } from '../src/modules/project/project.module';
-import { projectStepEntityMock } from '../src/modules/project-step/entities/project-step.entity.mock';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import {
   Project,

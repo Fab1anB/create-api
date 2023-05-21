@@ -1,32 +1,63 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateProjectStepDto } from './dto/create-project-step.dto';
 import { UpdateProjectStepDto } from './dto/update-project-step.dto';
-import {Repository} from "typeorm";
-import {ProjectStep} from "./entities/project-step.entity";
-import {InjectRepository} from "@nestjs/typeorm";
-import {Project} from "../project/entities/project.entity";
+import { Repository } from 'typeorm';
+import { ProjectStep } from './entities/project-step.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Project } from '../project/entities/project.entity';
 
 @Injectable()
 export class ProjectStepService {
-  constructor(@InjectRepository(ProjectStep) private repository: Repository<ProjectStep>) {
-  }
-  create(createProjectStepDto: CreateProjectStepDto) {
-    return 'This action adds a new projectStep';
+  private logger = new Logger(ProjectStepService.name);
+
+  constructor(
+    @InjectRepository(ProjectStep)
+    private projectStepRepository: Repository<ProjectStep>,
+    @InjectRepository(Project) private projectRepository: Repository<Project>,
+  ) {}
+
+  async create(createProjectStepDto: CreateProjectStepDto, projectId: number) {
+    this.logger.log(`Create ProjectStep${createProjectStepDto.title} for Project ${projectId}`);
+
+    const project = await this.projectRepository.findOneBy({ id: projectId });
+
+    if (!project) {
+      throw new NotFoundException(`Project ${projectId} not found`);
+    }
+
+    createProjectStepDto.project = project;
+    const projectStep = await this.projectStepRepository.save(
+      createProjectStepDto,
+    );
+
+    if (!project.steps?.length) {
+      project.steps = [];
+    }
+
+    projectStep.project = undefined;
+    return projectStep;
   }
 
-  findAll() {
-    return `This action returns all projectStep`;
+  async findAll(projectId: number) {
+    const project = await this.projectRepository.findOne({
+      where: { id: projectId },
+    });
+    return this.projectStepRepository.find({
+      where: {
+        project: project,
+      },
+    });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} projectStep`;
+    return this.projectStepRepository.findOneBy({ id });
   }
 
   update(id: number, updateProjectStepDto: UpdateProjectStepDto) {
-    return `This action updates a #${id} projectStep`;
+    return this.projectStepRepository.update({ id }, updateProjectStepDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} projectStep`;
+    return this.projectStepRepository.delete({ id });
   }
 }
