@@ -20,17 +20,13 @@ export class CreateProjectCategoryDto implements IProjectCategory {
 }
 
 export class CreateProjectDto implements Omit<IProject, 'id'> {
-  @ArrayMinSize(1)
-  @ValidateNested()
+  // @ArrayMinSize(1)
+  // @ValidateNested()
   categories: CreateProjectCategoryDto[];
 
   @IsString()
   @Length(5, 6000)
-  descriptionLong: string;
-
-  @IsString()
-  @Length(1, 60)
-  descriptionShort: string;
+  description: string;
 
   steps: ProjectStep[];
 
@@ -42,7 +38,5 @@ export class CreateProjectDto implements Omit<IProject, 'id'> {
   @Length(1, 60)
   title: string;
 
-  @IsString()
-  @Length(1, 60)
-  resultImage: string;
+  resultImage?: string;
 }

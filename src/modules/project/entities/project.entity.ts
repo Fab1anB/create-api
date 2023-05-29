@@ -32,11 +32,9 @@ export interface IProject {
 
   subtitle: string;
 
-  descriptionShort: string;
+  description: string;
 
-  descriptionLong: string;
-
-  resultImage: string;
+  resultImage?: string;
 
   steps: ProjectStep[];
 
@@ -55,13 +53,10 @@ export class Project implements IProject {
   subtitle: string;
 
   @Column()
-  descriptionShort: string;
+  description: string;
 
-  @Column()
-  descriptionLong: string;
-
-  @Column()
-  resultImage: string;
+  @Column({ nullable: true})
+  resultImage?: string;
 
   @OneToMany((type) => ProjectStep, (step) => step.id)
   steps: ProjectStep[];

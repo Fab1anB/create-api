@@ -7,10 +7,14 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @Controller('projects')
 export class ProjectController {
@@ -19,12 +23,35 @@ export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Post()
-  create(@Body() createProjectDto: CreateProjectDto) {
-    this.logger.log(
-      `Create project ${createProjectDto.title}`,
-      'ProjectController.create',
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          // Generating a 32 random chars long string
+          const randomName = Array(32)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('');
+          //Calling the callback passing the random name generated with the original extension name
+          cb(null, `${randomName}${file.originalname}`);
+        },
+      }),
+    }),
+  )
+  async create(
+    @Body() createProjectDto: CreateProjectDto,
+    @UploadedFile()
+    file: Express.Multer.File,
+  ) {
+    createProjectDto.categories = JSON.parse(
+      createProjectDto.categories as any,
     );
-    return this.projectService.create(createProjectDto);
+    const project = await this.projectService.create(createProjectDto);
+
+    const resultImage = await this.projectService.uploadToS3(file, project.id);
+    project.resultImage = resultImage;
+    return project;
   }
 
   @Get()

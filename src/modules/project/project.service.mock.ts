@@ -9,8 +9,7 @@ import { ProjectService } from './project.service';
 
 const createProjectEntityMock: Omit<IProject, 'id'> = {
   categories: [],
-  descriptionLong: 'descriptionLong',
-  descriptionShort: 'descriptionShort',
+  description: 'descriptionLong',
   resultImage: 'test.png',
   steps: [],
   subtitle: 'subtitle',
@@ -22,7 +21,7 @@ const projectEntityMock: IProject = {
   ...createProjectEntityMock,
 };
 
-export class ProjectServiceMock implements Public<ProjectService> {
+export class ProjectServiceMock {
   async create(createProjectDto: CreateProjectDto) {
     return Promise.resolve(projectEntityMock);
   }
@@ -42,4 +41,12 @@ export class ProjectServiceMock implements Public<ProjectService> {
   }
 
   projects: any[];
+
+  async uploadToS3(file: Express.Multer.File): Promise<{ data: string; success: boolean; message: string } | {
+    data: any;
+    success: boolean;
+    message: string
+  } | { data: {}; success: boolean; message: string }> {
+    return Promise.resolve(undefined);
+  }
 }
