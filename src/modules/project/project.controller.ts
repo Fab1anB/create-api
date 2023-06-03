@@ -15,12 +15,17 @@ import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { ProjectSearchService } from './project-search.service';
+import * as fs from 'fs';
 
 @Controller('projects')
 export class ProjectController {
   private readonly logger = new Logger(ProjectController.name);
 
-  constructor(private readonly projectService: ProjectService) {}
+  constructor(
+    private readonly projectService: ProjectService,
+    private readonly projectSearchService: ProjectSearchService,
+  ) {}
 
   @Post()
   @UseInterceptors(
@@ -29,10 +34,7 @@ export class ProjectController {
         destination: './uploads',
         filename: (req, file, cb) => {
           // Generating a 32 random chars long string
-          const randomName = Array(32)
-            .fill(null)
-            .map(() => Math.round(Math.random() * 16).toString(16))
-            .join('');
+          const randomName = new Date().toLocaleString();
           //Calling the callback passing the random name generated with the original extension name
           cb(null, `${randomName}${file.originalname}`);
         },
@@ -51,13 +53,20 @@ export class ProjectController {
 
     const resultImage = await this.projectService.uploadToS3(file, project.id);
     project.resultImage = resultImage;
+
+    fs.unlinkSync(file.path);
+
     return project;
   }
 
-  @Get()
-  findAll() {
-    this.logger.log('Find all projects', 'ProjectController.findAll');
-    return this.projectService.findAll();
+  @Post('search')
+  findAll(@Body() categoryIds?: string[]) {
+    this.logger.log(
+      'Find all projects for ids ' + categoryIds.toString(),
+      'ProjectController.findAll',
+    );
+
+    return this.projectSearchService.findAllWithCategories(categoryIds);
   }
 
   @Get(':id')

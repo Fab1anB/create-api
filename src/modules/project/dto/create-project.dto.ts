@@ -4,12 +4,7 @@ import {
   Project,
 } from '../entities/project.entity';
 import { ProjectStep } from '../../project-step/entities/project-step.entity';
-import {
-  ArrayMinSize,
-  IsString,
-  Length,
-  ValidateNested,
-} from 'class-validator';
+import { IsString, Length } from 'class-validator';
 
 export class CreateProjectCategoryDto implements IProjectCategory {
   @Length(1, 60)
@@ -29,6 +24,9 @@ export class CreateProjectDto implements Omit<IProject, 'id'> {
   description: string;
 
   steps: ProjectStep[];
+
+
+  difficulty: number;
 
   @IsString()
   @Length(1, 60)

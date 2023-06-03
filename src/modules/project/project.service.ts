@@ -14,6 +14,7 @@ import { S3BucketInitializationException } from '../errors/s3-errors';
 @Injectable()
 export class ProjectService {
   private readonly logger = new Logger(ProjectService.name);
+
   constructor(
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
@@ -25,11 +26,6 @@ export class ProjectService {
       'ProjectService.create',
     );
     return this.projectRepository.save(createProjectDto);
-  }
-
-  findAll() {
-    this.logger.log('Find all projects', 'ProjectService.findAll');
-    return this.projectRepository.find();
   }
 
   async findOne(id: number) {

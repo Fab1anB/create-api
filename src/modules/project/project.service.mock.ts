@@ -1,13 +1,9 @@
-import { Injectable } from '@nestjs/common';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { IProject, Project } from './entities/project.entity';
-import { Repository } from 'typeorm';
-import { Public } from '../../utils/public';
-import { ProjectService } from './project.service';
 
 const createProjectEntityMock: Omit<IProject, 'id'> = {
+  difficulty: 1,
   categories: [],
   description: 'descriptionLong',
   resultImage: 'test.png',

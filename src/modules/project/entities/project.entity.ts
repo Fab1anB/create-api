@@ -2,13 +2,11 @@ import { ProjectStep } from '../../project-step/entities/project-step.entity';
 import {
   Column,
   Entity,
-  OneToMany,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  ManyToMany,
   JoinTable,
+  ManyToMany,
+  OneToMany,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 export interface IProjectCategory {
@@ -34,6 +32,8 @@ export interface IProject {
 
   description: string;
 
+  difficulty: number;
+
   resultImage?: string;
 
   steps: ProjectStep[];
@@ -54,6 +54,9 @@ export class Project implements IProject {
 
   @Column()
   description: string;
+
+  @Column({default: 3})
+    difficulty: number;
 
   @Column({ nullable: true})
   resultImage?: string;
