@@ -14,8 +14,8 @@ export class ProjectSearchService {
 
   findAllWithCategories(categories: string[]) {
     this.logger.log(
-      'Find all projects for categories ' + categories.toString(),
-      'ProjectService.findAll',
+      'FindAll projects with categories ' + categories.toString(),
+      'ProjectSearchService.findAllWithCategories',
     );
     return this.projectRepository.find({
       relations: {

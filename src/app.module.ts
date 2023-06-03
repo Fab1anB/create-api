@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProjectModule } from './modules/project/project.module';
 import { ProjectStepModule } from './modules/project-step/project-step.module';
-import {TypeOrmModule} from "@nestjs/typeorm";
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -16,10 +16,11 @@ import {TypeOrmModule} from "@nestjs/typeorm";
       database: 'create',
       entities: [],
       synchronize: true,
-      autoLoadEntities: true
+      logging: false,
+      autoLoadEntities: true,
     }),
     ProjectModule,
-    ProjectStepModule
+    ProjectStepModule,
   ],
   controllers: [AppController],
   providers: [AppService],
