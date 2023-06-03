@@ -17,6 +17,9 @@ export class ProjectSearchService {
       'FindAll projects with categories ' + categories.toString(),
       'ProjectSearchService.findAllWithCategories',
     );
+
+    if (!categories.length) return this.projectRepository.find();
+
     return this.projectRepository.find({
       relations: {
         categories: true,

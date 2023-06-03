@@ -21,6 +21,7 @@ export class ProjectCategoryService {
       .createQueryBuilder()
       .select()
       .where('SOUNDEX(title) = SOUNDEX(:title)', { title: `${userInput}` })
+      .orWhere('title LIKE :title', { title: `%${userInput}%` })
       .getMany();
   }
 }
